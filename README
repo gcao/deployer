@@ -1,0 +1,5 @@
+To install a cookbook from https://github.com/opscode/cookbooks
+knife cookbook -c solo.rb site install apache2
+git merge chef-vendor-apache2
+
+
