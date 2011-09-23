@@ -1,0 +1,54 @@
+RewriteEngine On
+# Redirect / to forum
+RewriteRule ^/$ http://127.0.0.1/bbs/index.php [NC,P,L]
+  
+LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-2.2.15/ext/apache2/mod_passenger.so
+PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-2.2.15
+PassengerRuby /usr/bin/ruby1.8   
+
+<VirtualHost *:80>
+  ServerName localhost
+  DocumentRoot /var/www
+  RailsBaseURI /app
+
+  <Directory /var/www >
+    Options FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+  RailsEnv <%= @params[:rails_env] %>
+  RailsAllowModRewrite on
+  PassengerMaxPoolSize 20
+
+  <Directory <%= @params[:docroot] %>>
+    Options FollowSymLinks 
+    Options -MultiViews
+    AllowOverride all                 
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+  <IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+  </IfModule>
+
+  <IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/gif  A86400000
+    ExpiresByType image/jpeg  A86400000
+    ExpiresByType image/png  A86400000
+    ExpiresByType image/x-icon  A86400000
+    ExpiresByType text/css  A86400000
+    ExpiresByType application/javascript  A86400000
+  </IfModule>
+  
+  RewriteEngine On
+  # Redirect / to forum
+  RewriteRule ^/$ http://www.go-cool.org/bbs/index.php [NC,L]
+
+  LogLevel info
+  ErrorLog <%= @node[:apache][:log_dir] %>/gocool-error.log
+  CustomLog <%= @node[:apache][:log_dir] %>/gocool-access.log combined
+</VirtualHost>

@@ -1,0 +1,15 @@
+production:
+  adapter: mysql
+  database: gocool_production
+  user: <%= @username %>
+  password: <%= @password %>
+  pool: 10
+  timeout: 5000
+discuz:
+  adapter: mysql
+  database: bbs
+  user: <%= @username %>
+  password: <%= @password %>
+  pool: 10
+  timeout: 5000
+  encoding: utf8
