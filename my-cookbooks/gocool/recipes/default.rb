@@ -1,16 +1,16 @@
 include_recipe "rails"
 
-# See http://seattlerb.rubyforge.org/SyslogLogger/
-syslog_updated = false
-File.open("/etc/syslog.conf").each do |line|
-  syslog_updated = true and break if line.include?('gocool.log')
-end
-unless syslog_updated
-  `echo >> /etc/syslog.conf`
-  `echo '!rails' >> /etc/syslog.conf`
-  `echo '*.*  /var/log/gocool.log' >> /etc/syslog.conf`
-  `touch /var/log/gocool.log`
-end
+## See http://seattlerb.rubyforge.org/SyslogLogger/
+#syslog_updated = false
+#File.open("/etc/syslog.conf").each do |line|
+#  syslog_updated = true and break if line.include?('gocool.log')
+#end
+#unless syslog_updated
+#  `echo >> /etc/syslog.conf`
+#  `echo '!rails' >> /etc/syslog.conf`
+#  `echo '*.*  /var/log/gocool.log' >> /etc/syslog.conf`
+#  `touch /var/log/gocool.log`
+#end
 
 # Mysql setup
 # -----------
