@@ -1,5 +1,3 @@
-
-
 To install a cookbook from https://github.com/opscode/cookbooks
 knife cookbook -c solo.rb site install apache2
 git merge chef-vendor-apache2
@@ -15,23 +13,9 @@ vagrant init lucid32
 vagrant up
 vagrant suspend/resume/halt/destroy
 
-vagrant ssh
-sudo  bash
-apt-get update
-apt-get upgrade
-apt-get install git-core
-apt-get install curl
-# Install RVM
-bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)
-# Reconnect to vagrant to finish rvm installation
+# This should be run only ONCE!
+vagrant ssh-config | sed 's/Host default/Host vagrant/' >> $HOME/.ssh/config
 
-rvm install 1.8.7 ; rvm default 1.8.7
-gem install chef
+scp bootstrap.sh vagrant:. && ssh vagrant "sudo ./bootstrap.sh"
 
-git clone git://github.com/gcao/deployer.git
-cd deployer
-rvm gemset create deployer
-rvm use 1.8.7@deployer
-gem install bundler
-bundle install
 chef-solo -c $HOME/deployer/solo.rb -j $HOME/deployer/node.json
