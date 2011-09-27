@@ -30,6 +30,11 @@
   "memcached" : {
     "memory" : 256
   },
+  "mysql" : {
+    "server_root_password" : "t8ONFLodOyncM",
+    "server_repl_password" : "t8ONFLodOyncM",
+    "server_debian_password" : "t8ONFLodOyncM"
+  },
   "packages" : [
     "libreadline5-dev",
     "zlib1g-dev",
@@ -43,6 +48,8 @@
   ],
   "recipes" : [
     "cron",
+    "mysql::server",
+    "mysql::client",
     "php",
     "php::module_curl",
     "php::module_gd",
@@ -57,7 +64,6 @@
     "packages",
     "sudo",
     "openssh",
-    "mysql",
     "git",
     "gems",
     "ucenter",
