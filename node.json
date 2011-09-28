@@ -32,8 +32,8 @@
   },
   "mysql" : {
     "server_root_password" : "mysql_root_pw",
-    "server_repl_password" : ""mysql_root_pw",
-    "server_debian_password" : ""mysql_root_pw"
+    "server_repl_password" : "mysql_root_pw",
+    "server_debian_password" : "mysql_root_pw"
   },
   "packages" : [
     "libreadline5-dev",
