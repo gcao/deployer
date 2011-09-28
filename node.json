@@ -50,7 +50,7 @@
     "packages",
     "openssl",
     "cron",
-    "mysql::server"/*,
+    "mysql::server",
     "mysql::client",
     "php",
     "php::module_curl",
@@ -68,7 +68,7 @@
     "bbs",
     "jsgameviewer",
     "passenger_apache2",
-    "gocool"*/
+    "gocool"
   ],
   "ucenter" : {
     "docroot" : "/data/apps/ucenter/current",
