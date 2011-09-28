@@ -18,4 +18,5 @@ vagrant ssh-config | sed 's/Host default/Host vagrant/' >> $HOME/.ssh/config
 
 scp bootstrap.sh vagrant:. && ssh vagrant "sudo ./bootstrap.sh"
 
-chef-solo -c $HOME/deployer/solo.rb -j $HOME/deployer/node.json
+ssh vagrant "sudo chef-solo -c $HOME/deployer/solo.rb -j $HOME/deployer/node.json"
+

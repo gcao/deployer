@@ -30,12 +30,12 @@ template shared_config_dir + "/database.yml" do
   mode 0644
   variables(
     :username => 'root',
-    :password => node[:mysql_root_pass]
+    :password => node[:mysql][:server_root_password]
   )
 end
 
 execute "create-empty-db-for-gocool" do
-  command "mysql -u root -p#{node[:mysql_root_pass]} < /tmp/empty-gocool-db.sql"
+  command "mysql -u root -p#{node[:mysql][:server_root_password]} < /tmp/empty-gocool-db.sql"
 end
 
 # puts "===================== disable default site ====================="
