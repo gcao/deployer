@@ -16,7 +16,9 @@ vagrant suspend/resume/halt/destroy
 # This should be run only ONCE!
 vagrant ssh-config | sed 's/Host default/Host vagrant/' >> $HOME/.ssh/config
 
+# Deprecated
 scp bootstrap.sh vagrant:. && ssh vagrant "sudo ./bootstrap.sh"
 
+# Deprecated
 ssh vagrant "sudo chef-solo -c $HOME/deployer/solo.rb -j $HOME/deployer/node.json"
 
