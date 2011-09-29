@@ -52,6 +52,6 @@ web_app "gocool" do
   rails_env node[:gocool][:rails_env]
 end
 
-# service "apache2" do
-#   action :restart
-# end
+service "apache2" do
+  action :restart
+end

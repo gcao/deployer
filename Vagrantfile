@@ -56,6 +56,7 @@ Vagrant::Config.run do |config|
     chef.cookbooks_path = %W"cookbooks my-cookbooks"
     chef.log_level = :debug
 
+    chef.add_recipe "apt"
     chef.add_recipe "packages"
     chef.add_recipe "openssl"
     chef.add_recipe "cron"
