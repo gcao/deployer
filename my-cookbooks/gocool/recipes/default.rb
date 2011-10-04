@@ -1,5 +1,8 @@
 include_recipe "rails"
 
+`mkdir #{node[:gocool][:home]}/releases #{node[:gocool][:home]}/shared/config/initializers #{node[:gocool][:home]}/shared/bundle`
+`chmod a+w #{node[:gocool][:home]} #{node[:gocool][:home]}/releases #{node[:gocool][:home]}/shared/bundle`
+
 ## See http://seattlerb.rubyforge.org/SyslogLogger/
 #syslog_updated = false
 #File.open("/etc/syslog.conf").each do |line|
@@ -21,11 +24,7 @@ template "/tmp/empty-gocool-db.sql" do
   source "empty-db.sql.erb"
 end
 
-`mkdir #{node[:gocool][:home]}/releases`
-shared_config_dir = node[:gocool][:home] + "/shared/config"
-`mkdir -p #{shared_config_dir}`
-
-template shared_config_dir + "/database.yml" do
+template "#{node[:gocool][:home]}/shared/config/database.yml" do
   source "database.yml.erb"
   mode 0644
   variables(

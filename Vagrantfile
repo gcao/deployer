@@ -79,6 +79,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe "jsgameviewer"
     chef.add_recipe "passenger_apache2"
     chef.add_recipe "gocool"
+    chef.add_recipe "extras"
 
     # You may also specify custom JSON attributes:
     chef.json = {
@@ -90,6 +91,7 @@ Vagrant::Config.run do |config|
       ],
       :gems => [
         "rake",
+        "bundler",
         "mysql",
         "calendar_date_select",
         "thoughtbot-paperclip",
@@ -127,12 +129,15 @@ Vagrant::Config.run do |config|
         "sysklogd",
         "postfix",
         "unzip",
+        "git-core",
         "htop"
       ],
       :ucenter => {
         :docroot => "/data/apps/ucenter/current",
         :home => "/data/apps/ucenter"
-      }
+      },
+      :extras => {
+        :home => "/data/apps/extras"
     }
   end
 

@@ -1,7 +1,3 @@
-RewriteEngine On
-# Redirect / to forum
-RewriteRule ^/$ http://127.0.0.1/bbs/index.php [NC,P,L]
-  
 LoadModule passenger_module /opt/ruby/lib/ruby/gems/1.8/gems/passenger-3.0.7/ext/apache2/mod_passenger.so
 PassengerRoot /opt/ruby/lib/ruby/gems/1.8/gems/passenger-3.0.7
 PassengerRuby /opt/ruby/bin/ruby
@@ -24,7 +20,7 @@ PassengerRuby /opt/ruby/bin/ruby
   <Directory <%= @params[:docroot] %>>
     Options FollowSymLinks 
     Options -MultiViews
-    AllowOverride all                 
+    AllowOverride all
     Order allow,deny
     Allow from all
   </Directory>
@@ -42,10 +38,10 @@ PassengerRuby /opt/ruby/bin/ruby
     ExpiresByType text/css  A86400000
     ExpiresByType application/javascript  A86400000
   </IfModule>
-  
+
   RewriteEngine On
   # Redirect / to forum
-  RewriteRule ^/$ http://www.go-cool.org/bbs/index.php [NC,L]
+  RewriteRule ^/$ http://127.0.0.1/bbs/index.php [NC,L]
 
   LogLevel info
   ErrorLog <%= @node[:apache][:log_dir] %>/gocool-error.log

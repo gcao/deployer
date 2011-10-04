@@ -1,6 +1,5 @@
 To install a cookbook from https://github.com/opscode/cookbooks
 knife cookbook -c solo.rb site install apache2
-git merge chef-vendor-apache2
 
 Amazon EC2 Ubuntu image
 https://cloud-images.ubuntu.com/server/releases/11.04/release-20110426/
@@ -16,9 +15,30 @@ vagrant suspend/resume/halt/destroy
 # This should be run only ONCE!
 vagrant ssh-config | sed 's/Host default/Host vagrant/' >> $HOME/.ssh/config
 
-# Deprecated
-scp bootstrap.sh vagrant:. && ssh vagrant "sudo ./bootstrap.sh"
+Data to backup and restore
+/var/lib/mysql/bbs
+/var/lib/mysql/gocool_production
+/var/lib/mysql/ucenter
 
-# Deprecated
-ssh vagrant "sudo chef-solo -c $HOME/deployer/solo.rb -j $HOME/deployer/node.json"
+/data/apps/bbs/current/attachments
+/data/apps/bbs/current/images/avatars/bbsxp
+/data/apps/gocool/current/public/system
 
+ssh root@`ami_host` system/backup.sh
+scp root@`ami_host`:backup/* ~/proj/backup/
+
+Config files:
+bbs: config.inc.php
+gocool:
+  config/compass.config
+  config/database.yml
+  config/newrelic.yml
+  config/initializers/1_settings.rb
+  config/initializers/hoptoad.rb
+jsgameviewer:
+ucenter: data/config.inc.php
+
+To deploy bbs and other applications
+cd proj/bbs
+cap deploy:setup
+cap deploy
