@@ -15,15 +15,6 @@ include_recipe "rails"
 #  `touch /var/log/gocool.log`
 #end
 
-# Mysql setup
-# -----------
-template "/tmp/empty-gocool-db.sql" do
-  owner 'root'
-  group 'root'
-  mode 0644
-  source "empty-db.sql.erb"
-end
-
 template "#{node[:gocool][:home]}/shared/config/database.yml" do
   source "database.yml.erb"
   mode 0644
@@ -33,14 +24,7 @@ template "#{node[:gocool][:home]}/shared/config/database.yml" do
   )
 end
 
-execute "create-empty-db-for-gocool" do
-  command "mysql -u root -p#{node[:mysql][:server_root_password]} < /tmp/empty-gocool-db.sql"
-end
-
-# puts "===================== disable default site ====================="
-# `rm /etc/apache2/sites-enabled/000-default`
-
-`echo '<html><head><meta HTTP-EQUIV="REFRESH" content="0; url=http://www.go-cool.org/bbs/index.php"></head><body>Redirecting...</body></html>' > /var/www/index.html`
+`echo '<html><head><meta HTTP-EQUIV="REFRESH" content="0; url=http://#{node[:server_name]}/bbs/index.php"></head><body>Redirecting...</body></html>' > /var/www/index.html`
 
 `ln -s #{node[:gocool][:rails_root]}/public /var/www/app`
 
@@ -51,6 +35,10 @@ web_app "gocool" do
   rails_env node[:gocool][:rails_env]
 end
 
+puts "===================== disable default site ====================="
+`rm /etc/apache2/sites-enabled/000-default`
+
 service "apache2" do
   action :restart
 end
+

@@ -1,3 +1,5 @@
+raise "Exitting because environment variables are not set!" unless ENV["SERVER_NAME"]
+
 Vagrant::Config.run do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
@@ -19,7 +21,10 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port "http", 80, 8000
+  unless ENV["DEPLOYMENT_TARGET"] == "profuction"
+    config.vm.forward_port "http", 80, 8000
+    config.vm.forward_port "rails", 3000, 3333
+  end
 
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
@@ -83,6 +88,7 @@ Vagrant::Config.run do |config|
 
     # You may also specify custom JSON attributes:
     chef.json = {
+      :server_name => ENV["SERVER_NAME"],
       :bbs => {
         :docroot => "/data/apps/bbs/current",
         :home => "/data/apps/bbs"
@@ -116,9 +122,9 @@ Vagrant::Config.run do |config|
         :memory => 256
       },
       :mysql => {
-        :server_root_password => "mysql_root_pw",
-        :server_repl_password => "mysql_root_pw",
-        :server_debian_password => "mysql_root_pw"
+        :server_root_password => ENV["MYSQL_ROOT_PASSWORD"],
+        :server_repl_password => ENV["MYSQL_ROOT_PASSWORD"],
+        :server_debian_password => ENV["MYSQL_ROOT_PASSWORD"]
       },
       :packages => [
         "libreadline5-dev",
@@ -130,7 +136,7 @@ Vagrant::Config.run do |config|
         "postfix",
         "unzip",
         "git-core",
-        "htop"
+        "curl"
       ],
       :ucenter => {
         :docroot => "/data/apps/ucenter/current",
@@ -138,6 +144,7 @@ Vagrant::Config.run do |config|
       },
       :extras => {
         :home => "/data/apps/extras"
+      }
     }
   end
 

@@ -11,6 +11,7 @@ vagrant box add lucid32 http://files.vagrantup.com/lucid32.box
 vagrant init lucid32
 vagrant up
 vagrant suspend/resume/halt/destroy
+vagrant package --vagrantfile Vagrantfile
 
 # This should be run only ONCE!
 vagrant ssh-config | sed 's/Host default/Host vagrant/' >> $HOME/.ssh/config

@@ -1,3 +1,5 @@
+DirectoryIndex index.html,index.php
+
 LoadModule passenger_module /opt/ruby/lib/ruby/gems/1.8/gems/passenger-3.0.7/ext/apache2/mod_passenger.so
 PassengerRoot /opt/ruby/lib/ruby/gems/1.8/gems/passenger-3.0.7
 PassengerRuby /opt/ruby/bin/ruby
@@ -18,8 +20,7 @@ PassengerRuby /opt/ruby/bin/ruby
   PassengerMaxPoolSize 20
 
   <Directory <%= @params[:docroot] %>>
-    Options FollowSymLinks 
-    Options -MultiViews
+    Options FollowSymLinks
     AllowOverride all
     Order allow,deny
     Allow from all
@@ -41,7 +42,7 @@ PassengerRuby /opt/ruby/bin/ruby
 
   RewriteEngine On
   # Redirect / to forum
-  RewriteRule ^/$ http://127.0.0.1/bbs/index.php [NC,L]
+  RewriteRule ^/$ /bbs/index.php [NC,L]
 
   LogLevel info
   ErrorLog <%= @node[:apache][:log_dir] %>/gocool-error.log
