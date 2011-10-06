@@ -1,4 +1,4 @@
-`mkdir #{node[:bbs][:home]}/releases`
+`mkdir -p #{node[:bbs][:home]}/releases #{node[:bbs][:home]}/shared/config`
 `chmod a+w #{node[:bbs][:home]} #{node[:bbs][:home]}/releases`
 
 web_app "bbs" do
@@ -6,8 +6,8 @@ web_app "bbs" do
   template "bbs.conf.erb"
 end
 
-# TODO: Download db and images from Amazon S3
+template "#{node[:bbs][:home]}/shared/config/config.inc.php" do
+  source "config.inc.php.erb"
+  mode 0644
+end
 
-# service "apache2" do
-#   action :restart
-# end

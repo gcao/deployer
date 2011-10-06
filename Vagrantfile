@@ -21,7 +21,7 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  unless ENV["DEPLOYMENT_TARGET"] == "profuction"
+  unless ENV["DEPLOYMENT_TARGET"] == "production"
     config.vm.forward_port "http", 80, 8000
     config.vm.forward_port "rails", 3000, 3333
   end
@@ -88,7 +88,7 @@ Vagrant::Config.run do |config|
 
     # You may also specify custom JSON attributes:
     chef.json = {
-      :server_name => ENV["SERVER_NAME"],
+      :server_name => ENV["CHEF_SERVER"],
       :bbs => {
         :docroot => "/data/apps/bbs/current",
         :home => "/data/apps/bbs"
@@ -122,9 +122,9 @@ Vagrant::Config.run do |config|
         :memory => 256
       },
       :mysql => {
-        :server_root_password => ENV["MYSQL_ROOT_PASSWORD"],
-        :server_repl_password => ENV["MYSQL_ROOT_PASSWORD"],
-        :server_debian_password => ENV["MYSQL_ROOT_PASSWORD"]
+        :server_root_password => ENV["CHEF_MYSQL_ROOT_PASSWORD"],
+        :server_repl_password => ENV["CHEF_MYSQL_ROOT_PASSWORD"],
+        :server_debian_password => ENV["CHEF_MYSQL_ROOT_PASSWORD"]
       },
       :packages => [
         "libreadline5-dev",
@@ -146,6 +146,10 @@ Vagrant::Config.run do |config|
         :home => "/data/apps/extras"
       }
     }
+    ENV.each do |key, value|
+      chef.json[key] = value if key =~ /CHEF_/
+    end
+    p chef.json
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,

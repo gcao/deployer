@@ -1,6 +1,6 @@
 include_recipe "rails"
 
-`mkdir #{node[:gocool][:home]}/releases #{node[:gocool][:home]}/shared/config/initializers #{node[:gocool][:home]}/shared/bundle`
+`mkdir -p #{node[:gocool][:home]}/releases #{node[:gocool][:home]}/shared/config/initializers #{node[:gocool][:home]}/shared/bundle`
 `chmod a+w #{node[:gocool][:home]} #{node[:gocool][:home]}/releases #{node[:gocool][:home]}/shared/bundle`
 
 ## See http://seattlerb.rubyforge.org/SyslogLogger/
