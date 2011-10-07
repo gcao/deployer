@@ -24,6 +24,11 @@ template "#{node[:gocool][:home]}/shared/config/database.yml" do
   )
 end
 
+template "#{node[:gocool][:home]}/shared/config/initializers/1_settings.rb" do
+  source "1_settings.rb.erb"
+  mode 0644
+end
+
 `echo '<html><head><meta HTTP-EQUIV="REFRESH" content="0; url=http://#{node[:server_name]}/bbs/index.php"></head><body>Redirecting...</body></html>' > /var/www/index.html`
 
 `ln -s #{node[:gocool][:rails_root]}/public /var/www/app`

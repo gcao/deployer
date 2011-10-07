@@ -16,6 +16,7 @@ vagrant package --vagrantfile Vagrantfile
 
 # This should be run only ONCE!
 vagrant ssh-config | sed 's/Host default/Host vagrant/' >> $HOME/.ssh/config
+ssh vagrant 'source /etc/profile ; echo PATH=$PATH > .ssh/environment'
 
 Data to backup and restore
 /var/lib/mysql/bbs
@@ -41,6 +42,8 @@ jsgameviewer:
 ucenter: data/config.inc.php
 
 To deploy bbs and other applications
-cd proj/bbs
-cap deploy:setup
-cap deploy
+cd $HOME/proj/bbs && cap deploy:setup && cap deploy
+cd $HOME/proj/ucenter && cap deploy:setup && cap deploy
+cd $HOME/proj/jsgameviewer && cap deploy:setup && cap deploy
+cd $HOME/proj/bbs && cap deploy:setup && cap deploy
+cd $HOME/proj/server_extras && cap deploy:setup && cap deploy

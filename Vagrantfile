@@ -149,7 +149,6 @@ Vagrant::Config.run do |config|
     ENV.each do |key, value|
       chef.json[key] = value if key =~ /CHEF_/
     end
-    p chef.json
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,

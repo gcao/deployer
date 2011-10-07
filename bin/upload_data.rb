@@ -12,9 +12,10 @@ end
 
 run "scp data/* #{ssh_user_host}:/tmp/"
 
-run "ssh #{ssh_user_host} 'cd /data/apps/bbs/current && tar xzf /tmp/bbs-images.tgz'"
-run "ssh #{ssh_user_host} sudo sh -c 'cd /var/lib/mysql && tar xzf /tmp/mysql-bbs.tgz'"
-run "ssh #{ssh_user_host} sudo sh -c 'cd /var/lib/mysql && tar xzf /tmp/mysql-ucenter.tgz'"
-run "ssh #{ssh_user_host} sudo sh -c 'cd /var/lib/mysql && tar xzf /tmp/mysql-gocool.tgz'"
-run "ssh #{ssh_user_host} 'cd /data/apps/gocool/shared && tar xzf /tmp/gocool-sgfs.tgz'"
+run "ssh #{ssh_user_host} sudo tar xzf /tmp/bbs-images.tgz -C /data/apps/bbs/current"
+run "ssh #{ssh_user_host} sudo tar xzf /tmp/mysql-bbs.tgz -C /var/lib/mysql"
+run "ssh #{ssh_user_host} sudo tar xzf /tmp/mysql-ucenter.tgz -C /var/lib/mysql"
+run "ssh #{ssh_user_host} sudo tar xzf /tmp/mysql-gocool.tgz -C /var/lib/mysql"
+run "ssh #{ssh_user_host} sudo /etc/init.d/mysql restart"
+run "ssh #{ssh_user_host} sudo tar xzf /tmp/gocool-sgfs.tgz -C /data/apps/gocool/shared"
 
