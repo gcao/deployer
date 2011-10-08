@@ -1,4 +1,4 @@
-raise "Exitting because environment variables are not set!" unless ENV["SERVER_NAME"]
+raise "Exitting because environment variables are not set!" unless ENV["CHEF_SERVER"]
 
 Vagrant::Config.run do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -84,6 +84,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe "jsgameviewer"
     chef.add_recipe "passenger_apache2"
     chef.add_recipe "gocool"
+    chef.add_recipe "cronjobs"
     chef.add_recipe "extras"
 
     # You may also specify custom JSON attributes:
@@ -94,6 +95,11 @@ Vagrant::Config.run do |config|
         :home => "/data/apps/bbs"
       },
       :cronjobs => [
+        {
+          :name => "broadcast_tom",
+          :minute => "0",
+          :command => "RAILS_ENV=production ruby /data/apps/gocool/current/bin/broadcast_tom"
+        }
       ],
       :gems => [
         "rake",

@@ -47,3 +47,9 @@ cd $HOME/proj/ucenter && cap deploy:setup && cap deploy
 cd $HOME/proj/jsgameviewer && cap deploy:setup && cap deploy
 cd $HOME/proj/bbs && cap deploy:setup && cap deploy
 cd $HOME/proj/server_extras && cap deploy:setup && cap deploy
+
+ln -s /data/apps/gocool/current gocool
+ln -s /data/apps/bbs/current bbs
+ln -s /data/apps/jsgameviewer/current jsgameviewer
+ln -s /data/apps/extras/current extras
+ln -s /data/apps/ucenter/current ucenter

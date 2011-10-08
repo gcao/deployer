@@ -9,3 +9,10 @@ if File.open('/etc/ssh/sshd_config').read !~ /PermitUserEnvironment/
   `/etc/init.d/ssh restart`
 end
 
+File.open("/etc/profile.d/custom_environment.sh", "w") do |file|
+  node.each do |key, value|
+    next if key.to_s !~ /^CHEF/
+    file.print "export #{key}='#{value}'\n"
+  end
+end
+
