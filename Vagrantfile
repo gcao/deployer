@@ -64,6 +64,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe "apt"
     chef.add_recipe "packages"
     chef.add_recipe "openssl"
+    chef.add_recipe "java"
     chef.add_recipe "cron"
     chef.add_recipe "mysql::server"
     chef.add_recipe "mysql::client"
