@@ -53,3 +53,12 @@ ln -s /data/apps/bbs/current bbs
 ln -s /data/apps/jsgameviewer/current jsgameviewer
 ln -s /data/apps/extras/current extras
 ln -s /data/apps/ucenter/current ucenter
+
+Vagrant+EC2
+https://github.com/mlinderm/vagrant-aws
+
+====================
+
+Bootstrap with rbenv
+https://gist.github.com/1323779
+TODO: remove unused stuff, upload cookbooks and dna.json etc

@@ -180,4 +180,13 @@ Vagrant::Config.run do |config|
   # chef-validator, unless you changed the configuration.
   #
   #   chef.validation_client_name = "ORGNAME-validator"
+
+  config.aws.key_name = "ec2-keypair"
+  config.aws.private_key_path = "#{ENV['HOME']}/.ssh/ec2-keypair"
+  config.aws.region = "us-east-1"
+  config.aws.availability_zone = nil  # Let AWS choose
+  config.aws.image = "ami-2ec83147"   # EBS-backed Ubuntu 10.04 64-bit
+  config.aws.username = "ubuntu"
+  config.aws.security_groups = ["default"]
+  config.aws.flavor = "t1.micro"
 end
