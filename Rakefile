@@ -16,23 +16,21 @@ task :test do
   end
 end
 
-desc "Create dna from ruby file"
-task :create_dna  do
-  dna_file = File.join(File.dirname(__FILE__), "config", "dna.rb")
-  raise "There is no confit/dna.rb file! Take care of that!" unless File.exists? dna_file
-  sh "ruby #{dna_file}"
-end
-
 desc "Upload the latest copy of your cookbooks to remote server"
-task :upload => [:test, :create_dna]  do
+task :upload => [:test]  do
   if !ENV["server"]
     puts "You need to specify a server rake upload server=whatever.com"
     exit 1
   end
 
   puts "* Upload your cookbooks *"
-  sh "rsync -rlP --delete --exclude '.*' #{File.dirname(__FILE__)}/ #{ENV['server']}:#{REMOTE_CHEF_PATH}"
-  File.delete(File.dirname(__FILE__) + "/config/dna.json")
+  begin
+    `GENERATE_DNA_ONLY=true vagrant`
+    sh "rsync -rlP --delete --exclude '.*' #{File.dirname(__FILE__)}/ #{ENV['server']}:#{REMOTE_CHEF_PATH}"
+    File.delete(File.dirname(__FILE__) + "/config/dna.json")
+  ensure
+    #`rm dna.json`
+  end
 end
 
 desc "Run chef solo on the server"
