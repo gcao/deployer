@@ -11,8 +11,8 @@ desc "Bootstrap server for chef"
 task :bootstrap do
   check_server_env :bootstrap
 
-  `scp bin/bootstrap #{ENV["server"]}:/tmp`
-  `ssh #{ENV["server"]} sudo /tmp/bootstrap`
+  sh "scp bin/bootstrap #{ENV["server"]}:/tmp"
+  sh "ssh #{ENV["server"]} sudo /tmp/bootstrap"
 end
 
 desc "Test your cookbooks and config files for syntax errors"
@@ -30,16 +30,17 @@ task :upload do
 
   puts "* Upload your cookbooks *"
   sh "export GENERATE_DNA_ONLY=true; vagrant"
+  sh "ssh #{ENV['server']} sudo rm -rf #{REMOTE_CHEF_PATH}"
   sh "rsync -rlP --delete --exclude '.*' --exclude 'data/*' #{File.dirname(__FILE__)}/ #{ENV['server']}:#{REMOTE_CHEF_PATH}"
   #sh "rm dna.json"
 end
 
 desc "Run chef solo on the server"
-task :cook => [:upload]  do
+task :cook do
   check_server_env :cook
 
   puts "* Running chef solo on remote server *"
-  sh "ssh #{ENV['server']} \"cd #{REMOTE_CHEF_PATH}; chef-solo -l debug -c solo.rb -j dna.json \""
+  sh "ssh #{ENV['server']} sudo -i chef-solo -l debug -c #{REMOTE_CHEF_PATH}/solo.rb -j #{REMOTE_CHEF_PATH}/dna.json"
 end
 
 def check_server_env task

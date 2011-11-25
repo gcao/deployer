@@ -134,7 +134,7 @@ Vagrant::Config.run do |config|
         :server_debian_password => ENV["CHEF_MYSQL_ROOT_PASSWORD"]
       },
       :packages => [
-        "libreadline5-dev",
+        #"libreadline5-dev",
         "zlib1g-dev",
         "libssl-dev",
         "libxml2-dev",
