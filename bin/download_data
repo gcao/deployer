@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/bin/bash
 
 scp root@`ami_host`:backup/*.tgz data/
 

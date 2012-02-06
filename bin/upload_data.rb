@@ -16,6 +16,6 @@ run "ssh #{ssh_user_host} sudo tar xzf /tmp/bbs-images.tgz -C /data/apps/bbs/cur
 run "ssh #{ssh_user_host} sudo tar xzf /tmp/mysql-bbs.tgz -C /var/lib/mysql"
 run "ssh #{ssh_user_host} sudo tar xzf /tmp/mysql-ucenter.tgz -C /var/lib/mysql"
 run "ssh #{ssh_user_host} sudo tar xzf /tmp/mysql-gocool.tgz -C /var/lib/mysql"
-run "ssh #{ssh_user_host} sudo /etc/init.d/mysql restart"
+run "ssh #{ssh_user_host} sudo restart mysql"
 run "ssh #{ssh_user_host} sudo tar xzf /tmp/gocool-sgfs.tgz -C /data/apps/gocool/shared"
 

@@ -5,14 +5,14 @@ task :default do
   puts output
 end
 
-REMOTE_CHEF_PATH = "/tmp/chef" # Where to find upstream cookbooks
+REMOTE_CHEF_PATH = "/etc/chef" # Where to find upstream cookbooks
 
 desc "Bootstrap server for chef"
 task :bootstrap do
   check_server_env :bootstrap
 
-  sh "scp bin/bootstrap #{ENV["server"]}:/tmp"
-  sh "ssh #{ENV["server"]} sudo /tmp/bootstrap"
+  sh "scp bin/bootstrap #{ENV["CHEF_SSH_USER_HOST"]}:/tmp"
+  sh "ssh #{ENV["CHEF_SSH_USER_HOST"]} /tmp/bootstrap"
 end
 
 desc "Test your cookbooks and config files for syntax errors"
@@ -30,8 +30,8 @@ task :upload do
 
   puts "* Upload your cookbooks *"
   sh "export GENERATE_DNA_ONLY=true; vagrant"
-  sh "ssh #{ENV['server']} sudo rm -rf #{REMOTE_CHEF_PATH}"
-  sh "rsync -rlP --delete --exclude '.*' --exclude 'data/*' #{File.dirname(__FILE__)}/ #{ENV['server']}:#{REMOTE_CHEF_PATH}"
+  #sh "ssh #{ENV['CHEF_SSH_USER_HOST']} rm -rf #{REMOTE_CHEF_PATH}"
+  sh "rsync -rlP --delete --exclude '.*' --exclude 'data/*' #{File.dirname(__FILE__)}/ #{ENV['CHEF_SSH_USER_HOST']}:#{REMOTE_CHEF_PATH}"
   #sh "rm dna.json"
 end
 
@@ -40,12 +40,12 @@ task :cook do
   check_server_env :cook
 
   puts "* Running chef solo on remote server *"
-  sh "ssh #{ENV['server']} sudo -i chef-solo -l debug -c #{REMOTE_CHEF_PATH}/solo.rb -j #{REMOTE_CHEF_PATH}/dna.json"
+  sh "ssh #{ENV['CHEF_SSH_USER_HOST']} chef-solo -l debug -c #{REMOTE_CHEF_PATH}/solo.rb -j #{REMOTE_CHEF_PATH}/dna.json"
 end
 
 def check_server_env task
-  if !ENV["server"]
-    puts "You need to specify a server: rake #{task} server=whatever.com"
+  if !ENV["CHEF_SSH_USER_HOST"]
+    puts "CHEF_SSH_USER_HOST is not set!"
     exit 1
   end
 end

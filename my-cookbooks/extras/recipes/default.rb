@@ -6,7 +6,7 @@
 
 if File.open('/etc/ssh/sshd_config').read !~ /PermitUserEnvironment/
   `echo PermitUserEnvironment yes >> /etc/ssh/sshd_config`
-  `/etc/init.d/ssh restart`
+  `restart ssh`
 end
 
 File.open("/etc/profile.d/custom_environment.sh", "w") do |file|
