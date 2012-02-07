@@ -8,9 +8,13 @@ PassengerRoot /usr/local/rbenv/versions/1.8.7-p352/lib/ruby/gems/1.8/gems/passen
 PassengerRuby /usr/local/rbenv/shims/ruby
 
 <VirtualHost *:80>
-  ServerName localhost
+  ServerName <%= @params[:server_name] %>
+  ServerName www.go-cool.org
   DocumentRoot /var/www
+
   RailsBaseURI /app
+  RailsEnv <%= @params[:rails_env] %>
+  PassengerMaxPoolSize 20
 
   <Directory /var/www >
     Options FollowSymLinks
@@ -18,9 +22,6 @@ PassengerRuby /usr/local/rbenv/shims/ruby
     Order allow,deny
     Allow from all
   </Directory>
-
-  RailsEnv <%= @params[:rails_env] %>
-  PassengerMaxPoolSize 20
 
   <Directory <%= @params[:docroot] %>>
     Options FollowSymLinks

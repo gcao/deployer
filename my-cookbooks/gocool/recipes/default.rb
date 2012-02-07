@@ -36,7 +36,7 @@ end
 web_app "gocool" do
   template "gocool.conf.erb"
   docroot node[:gocool][:rails_root] + "/public"
-  server_name node[:fqdn]
+  server_name node[:CHEF_SERVER]
   rails_env node[:gocool][:rails_env]
 end
 

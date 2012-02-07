@@ -1,5 +1,6 @@
 `mkdir -p #{node[:extras][:home]}/releases #{node[:extras][:home]}/shared`
 `chmod a+w #{node[:extras][:home]} #{node[:extras][:home]}/releases`
+`ln -s /data/apps/gocool/current/public /var/www/app`
 
 `su #{node['CHEF_USER']} -c 'mkdir $HOME/.ssh'`
 `su #{node['CHEF_USER']} -c 'source /etc/profile ; echo PATH=$PATH > $HOME/.ssh/environment'`
