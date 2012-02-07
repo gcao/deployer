@@ -10,12 +10,7 @@ def run cmd
   system(cmd)
 end
 
-run "scp data/* #{ssh_user_host}:/tmp/"
+run "scp data/* #{ssh_user_host}:backup/"
 
-run "ssh #{ssh_user_host} sudo tar xzf /tmp/bbs-images.tgz -C /data/apps/bbs/current"
-run "ssh #{ssh_user_host} sudo tar xzf /tmp/mysql-bbs.tgz -C /var/lib/mysql"
-run "ssh #{ssh_user_host} sudo tar xzf /tmp/mysql-ucenter.tgz -C /var/lib/mysql"
-run "ssh #{ssh_user_host} sudo tar xzf /tmp/mysql-gocool.tgz -C /var/lib/mysql"
-run "ssh #{ssh_user_host} sudo restart mysql"
-run "ssh #{ssh_user_host} sudo tar xzf /tmp/gocool-sgfs.tgz -C /data/apps/gocool/shared"
+run "ssh #{ssh_user_host} sudo /data/apps/extras/current/restore.sh"
 

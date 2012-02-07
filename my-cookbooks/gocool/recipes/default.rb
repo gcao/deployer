@@ -1,5 +1,8 @@
 include_recipe "rails"
 
+# Fix ruby script by rbenv
+`sed -i.bak 's|exec rbenv|exec $RBENV_ROOT/bin/rbenv|' /usr/local/rbenv/shims/ruby`
+
 `mkdir -p #{node[:gocool][:home]}/releases #{node[:gocool][:home]}/shared/config/initializers #{node[:gocool][:home]}/shared/bundle`
 `chmod a+w #{node[:gocool][:home]} #{node[:gocool][:home]}/releases #{node[:gocool][:home]}/shared/bundle`
 
