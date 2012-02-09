@@ -16,3 +16,8 @@ File.open("/etc/profile.d/custom_environment.sh", "w") do |file|
   end
 end
 
+template "/var/www/index.php" do
+  source "index.php.erb"
+  mode 0644
+end
+

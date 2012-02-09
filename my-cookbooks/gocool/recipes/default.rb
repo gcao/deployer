@@ -6,17 +6,16 @@ include_recipe "rails"
 `mkdir -p #{node[:gocool][:home]}/releases #{node[:gocool][:home]}/shared/config/initializers #{node[:gocool][:home]}/shared/bundle`
 `chmod a+w #{node[:gocool][:home]} #{node[:gocool][:home]}/releases #{node[:gocool][:home]}/shared/bundle`
 
-## See http://seattlerb.rubyforge.org/SyslogLogger/
-#syslog_updated = false
-#File.open("/etc/syslog.conf").each do |line|
-#  syslog_updated = true and break if line.include?('gocool.log')
-#end
-#unless syslog_updated
-#  `echo >> /etc/syslog.conf`
-#  `echo '!rails' >> /etc/syslog.conf`
-#  `echo '*.*  /var/log/gocool.log' >> /etc/syslog.conf`
-#  `touch /var/log/gocool.log`
-#end
+# See http://seattlerb.rubyforge.org/SyslogLogger/
+syslog_updated = false
+File.open("/etc/syslog.conf").each do |line|
+  syslog_updated = true and break if line.include?('gocool.log')
+end
+unless syslog_updated
+  `echo '!gocool' >> /etc/syslog.conf`
+  `echo 'user.*  /var/log/gocool.log' >> /etc/syslog.conf`
+  `touch /var/log/gocool.log`
+end
 
 template "#{node[:gocool][:home]}/shared/config/database.yml" do
   source "database.yml.erb"
@@ -32,8 +31,6 @@ template "#{node[:gocool][:home]}/shared/config/initializers/1_settings.rb" do
   mode 0644
 end
 
-`echo '<html><head><meta HTTP-EQUIV="REFRESH" content="0; url=http://#{node[:server_name]}/bbs/index.php"></head><body>Redirecting...</body></html>' > /var/www/index.html`
-
 `ln -s #{node[:gocool][:rails_root]}/public /var/www/app`
 
 web_app "gocool" do
@@ -41,6 +38,16 @@ web_app "gocool" do
   docroot node[:gocool][:rails_root] + "/public"
   server_name node[:CHEF_SERVER]
   rails_env node[:gocool][:rails_env]
+end
+
+template "/etc/apache2/sites-available/gocool-maintenance.conf" do
+  source "gocool-maintenance.conf.erb"
+  mode 0644
+end
+
+template "/var/www/maintain-app.php" do
+  source "maintain-app.php.erb"
+  mode 0644
 end
 
 puts "===================== disable default site ====================="

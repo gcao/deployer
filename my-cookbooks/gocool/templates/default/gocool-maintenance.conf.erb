@@ -1,0 +1,22 @@
+<VirtualHost *:80>
+  ServerName <%= @node[:CHEF_SERVER] %>
+  ServerName www.go-cool.org
+  DocumentRoot /var/www
+
+  <Directory /var/www >
+    Options FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+  RewriteEngine On
+  # Redirect / to forum
+  RewriteRule ^/$ /bbs/index.php [NC,L]
+  RewriteRule ^/app /maintain-app.php [NC,L]
+
+  LogLevel info
+  ErrorLog <%= @node[:apache][:log_dir] %>/gocool-error.log
+  CustomLog <%= @node[:apache][:log_dir] %>/gocool-access.log combined
+</VirtualHost>
+

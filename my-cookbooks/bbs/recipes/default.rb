@@ -6,6 +6,16 @@ web_app "bbs" do
   template "bbs.conf.erb"
 end
 
+template "/etc/apache2/sites-available/bbs-maintenance.conf" do
+  source "bbs-maintenance.conf.erb"
+  mode 0644
+end
+
+template "/var/www/maintain-bbs.php" do
+  source "maintain-bbs.php.erb"
+  mode 0644
+end
+
 template "#{node[:bbs][:home]}/shared/config/config.inc.php" do
   source "config.inc.php.erb"
   mode 0644

@@ -10,6 +10,7 @@ def run cmd
   system(cmd)
 end
 
+run "ssh #{ssh_user_host} mkdir backup"
 run "scp data/* #{ssh_user_host}:backup/"
 
 run "ssh #{ssh_user_host} sudo /data/apps/extras/current/restore.sh"

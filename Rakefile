@@ -43,6 +43,32 @@ task :cook do
   sh "ssh #{ENV['CHEF_SSH_USER_HOST']} chef-solo -l debug -c #{REMOTE_CHEF_PATH}/solo.rb -j #{REMOTE_CHEF_PATH}/dna.json"
 end
 
+namespace :maintenance do
+  desc "Start maintenance"
+  task :start do
+    check_server_env :'maintenance:start'
+
+    # TODO: .htaccess is not good, see http://httpd.apache.org/docs/current/howto/htaccess.html
+    # Let's use a special config file instead
+    my_public_ip = `curl http://www.biranchi.com/ip.php`
+    `cat <<HTACCESS | ssh #{ENV['CHEF_SSH_USER_HOST']} 'cat > /var/www/.htaccess'
+Options +FollowSymlinks
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !/maintenance.html$
+RewriteCond %{REMOTE_ADDR} !^#{my_public_ip.gsub('.', '\.')}
+RewriteRule $ /maintenance.html [R=302,L]
+HTACCESS
+`
+  end
+
+  desc "Stop maintenance"
+  task :stop do
+    check_server_env :'maintenance:start'
+
+    `ssh #{ENV['CHEF_SSH_USER_HOST']} rm /var/www/.htaccess`
+  end
+end
+
 def check_server_env task
   if !ENV["CHEF_SSH_USER_HOST"]
     puts "CHEF_SSH_USER_HOST is not set!"
