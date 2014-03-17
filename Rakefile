@@ -7,12 +7,21 @@ end
 
 REMOTE_CHEF_PATH = "/etc/chef" # Where to find upstream cookbooks
 
+desc "Prepare server for ssh as root"
+task :prepare do
+  check_server_env :prepare
+  sh "ssh #{ENV['CHEF_USER']}@#{ENV['CHEF_SERVER']} 'sudo cp /home/#{ENV['CHEF_USER']}/.ssh/authorized_keys /root/.ssh/'"
+  sh "ssh root@#{ENV['CHEF_SERVER']} 'source /etc/profile ; echo PATH=$PATH > $HOME/.ssh/environment'"
+  sh "ssh root@#{ENV['CHEF_SERVER']} 'echo PermitUserEnvironment yes >> /etc/ssh/sshd_config'"
+  sh "ssh root@#{ENV['CHEF_SERVER']} restart ssh"
+end
+
 desc "Bootstrap server for chef"
 task :bootstrap do
   check_server_env :bootstrap
 
-  sh "scp bin/bootstrap #{ENV["CHEF_SSH_USER_HOST"]}:/tmp"
-  sh "ssh #{ENV["CHEF_SSH_USER_HOST"]} /tmp/bootstrap"
+  sh "scp bin/bootstrap root@#{ENV["CHEF_SERVER"]}:/tmp"
+  sh "ssh root@#{ENV["CHEF_SERVER"]} /tmp/bootstrap"
 end
 
 desc "Test your cookbooks and config files for syntax errors"
@@ -30,8 +39,8 @@ task :upload do
 
   puts "* Upload your cookbooks *"
   sh "export GENERATE_DNA_ONLY=true; vagrant"
-  #sh "ssh #{ENV['CHEF_SSH_USER_HOST']} rm -rf #{REMOTE_CHEF_PATH}"
-  sh "rsync -rlP --delete --exclude '.*' --exclude 'data/*' #{File.dirname(__FILE__)}/ #{ENV['CHEF_SSH_USER_HOST']}:#{REMOTE_CHEF_PATH}"
+  #sh "ssh root@#{ENV['CHEF_SERVER']} rm -rf #{REMOTE_CHEF_PATH}"
+  sh "rsync -rlP --delete --exclude '.*' --exclude 'data/*' #{File.dirname(__FILE__)}/ root@#{ENV['CHEF_SERVER']}:#{REMOTE_CHEF_PATH}"
   #sh "rm dna.json"
 end
 
@@ -40,7 +49,7 @@ task :cook do
   check_server_env :cook
 
   puts "* Running chef solo on remote server *"
-  sh "ssh #{ENV['CHEF_SSH_USER_HOST']} chef-solo -l debug -c #{REMOTE_CHEF_PATH}/solo.rb -j #{REMOTE_CHEF_PATH}/dna.json"
+  sh "ssh root@#{ENV['CHEF_SERVER']} /usr/local/rbenv/shims/chef-solo -l debug -c #{REMOTE_CHEF_PATH}/solo.rb -j #{REMOTE_CHEF_PATH}/dna.json"
 end
 
 namespace :maintenance do
@@ -51,7 +60,7 @@ namespace :maintenance do
     # TODO: .htaccess is not good, see http://httpd.apache.org/docs/current/howto/htaccess.html
     # Let's use a special config file instead
     my_public_ip = `curl http://www.biranchi.com/ip.php`
-    `cat <<HTACCESS | ssh #{ENV['CHEF_SSH_USER_HOST']} 'cat > /var/www/.htaccess'
+    `cat <<HTACCESS | ssh root@#{ENV['CHEF_SERVER']} 'cat > /var/www/.htaccess'
 Options +FollowSymlinks
 RewriteEngine on
 RewriteCond %{REQUEST_URI} !/maintenance.html$
@@ -65,13 +74,13 @@ HTACCESS
   task :stop do
     check_server_env :'maintenance:start'
 
-    `ssh #{ENV['CHEF_SSH_USER_HOST']} rm /var/www/.htaccess`
+    `ssh root@#{ENV['CHEF_SERVER']} rm /var/www/.htaccess`
   end
 end
 
 def check_server_env task
-  if !ENV["CHEF_SSH_USER_HOST"]
-    puts "CHEF_SSH_USER_HOST is not set!"
+  if !ENV["CHEF_SERVER"]
+    puts "CHEF_SERVER is not set!"
     exit 1
   end
 end

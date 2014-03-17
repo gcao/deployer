@@ -7,10 +7,9 @@ https://cloud-images.ubuntu.com/server/releases/11.04/release-20110426/
 # Create EC2 10.04 on EC2 US-EAST  http://alestic.com/  ami-71dc0b18
 ec2-run-instances ami-71dc0b18 -k ec2-keypair
 export CHEF_SERVER=ec2-184-72-197-159.compute-1.amazonaws.com
-ssh ubuntu@$CHEF_SERVER 'sudo cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'
-ssh root@$CHEF_SERVER 'source /etc/profile ; echo PATH=$PATH > $HOME/.ssh/environment'
-ssh root@$CHEF_SERVER "echo PermitUserEnvironment yes >> /etc/ssh/sshd_config"
-ssh root@$CHEF_SERVER restart ssh
+
+# Prepare remote server for ssh access
+rake prepare
 # Copy environment variables from 1Password
 rake bootstrap
 rake upload

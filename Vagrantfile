@@ -22,8 +22,8 @@ Vagrant::Config.run do |config|
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
   unless ENV["DEPLOYMENT_TARGET"] == "production"
-    config.vm.forward_port "http", 80, 8000
-    config.vm.forward_port "rails", 3000, 3333
+    config.vm.forward_port 80, 8000
+    config.vm.forward_port 3000, 3333
   end
 
   # Share an additional folder to the guest VM. The first argument is
@@ -102,6 +102,9 @@ Vagrant::Config.run do |config|
           :command => "RAILS_ENV=production ruby /data/apps/gocool/current/bin/broadcast_tom"
         }
       ],
+      :rails => {
+        :version => '3.0.3'
+      },
       :gems => [
         "rake",
         "bundler",
